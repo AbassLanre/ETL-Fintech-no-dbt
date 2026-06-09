@@ -59,6 +59,33 @@ select count(*) from (select
 from bronze.sparkov_fraud_test sft ) t
 where t.cc_num - 1000000 > 1;
 
+select 
+	count(*)
+from (select distinct
+		sft.cc_num
+		from bronze.sparkov_fraud_test sft
+		order by sft.cc_num desc) t
+		
+select 
+	t.cc_num,
+	trans_numm
+from (select
+		*, 
+		row_number() over (partition by sft.cc_num) as trans_numm
+		from bronze.sparkov_fraud_test sft) t
+where trans_numm >1
+
+select 
+	t.cc_num,
+	t.first,
+	t.last,
+	trans_numm
+from (select
+		*, 
+		row_number() over (partition by sft.cc_num) as trans_numm
+		from bronze.sparkov_fraud_test sft) t
+where trans_numm >1
+
 -- MERCHANT
 -- check and ensure merchant is not null
 select count(*) from (select *

@@ -18,6 +18,7 @@ insert into silver.sparkov_fraud_test(
 	long ,
 	city_pop,
 	dob,
+	job,
 	trans_day_of_week,
 	customer_age,
 	trans_num,
@@ -47,6 +48,7 @@ select
 	t.long ,
 	t.city_pop,
 	t.dob,
+	job,
 	to_char(dob, 'FMDay') as trans_day_of_week,
 	date_part('year',age(now(), dob)) as customer_age,
 	t.trans_num,
@@ -77,7 +79,8 @@ where
 	t.trans_date_trans_time  is not null and 
 	t.merchant is not null and 
 	t.amt >= 0.01 and 
-	t.amt <= 1000000 ;
+	t.amt <= 1000000 and 
+	t.job is not null;
 	
 
 -- Python merchant
@@ -112,6 +115,7 @@ insert into silver.sparkov_fraud_test_drop(
 	long ,
 	city_pop,
 	dob,
+	job,
 	trans_day_of_week,
 	customer_age,
 	trans_num,
@@ -141,6 +145,7 @@ select
 	t.long ,
 	t.city_pop,
 	t.dob,
+	t.job,
 	to_char(dob, 'FMDay') as trans_day_of_week,
 	date_part('year',age(now(), dob)) as customer_age,
 	t.trans_num,
@@ -171,7 +176,8 @@ where
 	t.trans_date_trans_time  is null or 
 	t.merchant is null or 
 	t.amt < 0.01 or 
-	t.amt > 1000000;
+	t.amt > 1000000 or 
+	t.job is null;
 	
 	
 	
