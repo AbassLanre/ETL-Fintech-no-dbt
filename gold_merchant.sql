@@ -2,24 +2,25 @@
 
 -- for cases where the merchant don't exist in the transaction table
 
-insert
-	into
-	silver.python_merchant (
-	merchant_id,
-	merchant_name,
-	category,
-	merchant_tier,
-	country,
-	city,
-	commission_rate,
-	is_online,
-	founded_year,
-	is_active)
-	values ('UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 0, false, 0, false);
 
-
+drop view if exists gold.dim_merchant ;
 
 create or replace view gold.dim_merchant as 
+
+select 
+    -1                                       as merchant_key,
+    'UNKNOWN'                                as merchant_id,
+    'UNKNOWN'                                as merchant_name,
+    'UNKNOWN'                                as category,
+    'UNKNOWN'                                as merchant_tier,
+    'UNKNOWN'                                as country,
+    'UNKNOWN'                                as city,
+    0::numeric(19,4)                         as commission_rate,
+    false                                    as is_online,
+    0                                        as founded_year,
+    false                                    as is_active
+
+union all
 
 select 
 row_number() over (order by pm.merchant_id ) as merchant_key,
@@ -34,9 +35,4 @@ pm.is_online,
 pm.founded_year, 
 pm.is_active
 from silver.python_merchant pm 
-
-
-
-
-SELECT * 
-from silver.python_merchant pm 
+where pm.merchant_id != 'UNKNOWN'

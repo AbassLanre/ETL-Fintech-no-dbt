@@ -17,6 +17,8 @@
 --end if;
 --end $$;
 
+drop table if exists gold.fact_transaction ;
+
 CREATE TABLE IF NOT EXISTS gold.fact_transaction (
     customer_key INT,
     merchant_key INT,
@@ -65,21 +67,17 @@ select
 from
 	silver.sparkov_fraud_test sft
 left join gold.dim_customers dc
-
 on
 	dc.cc_num = sft.cc_num
 left join gold.dim_merchant dm
-
 on
 	dm.merchant_name = sft.merchant
 left join gold.dim_location dl
-
 on
 	dl.zip = sft.zip
 left join gold.dim_date dd
-
 on
-	dd.trans_date_trans_time = sft.trans_date_trans_time
+	dd.full_date = sft.trans_date_trans_time::date
 	
 
 	

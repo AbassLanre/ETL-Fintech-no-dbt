@@ -186,12 +186,12 @@ where sft.dob is null;
 
 -- dob to day of the week
 select
-to_char(dob, 'FMDay') as daysss
+to_char(sft.trans_date_trans_time , 'FMDay') as daysss
 from bronze.sparkov_fraud_test sft
 
 -- dob : cus age
 select
-date_part('year',age(now(), dob)) as age
+date_part('year',age(trans_date_trans_time, dob)) as age
 from bronze.sparkov_fraud_test sft
 
 -- null on unix_time
